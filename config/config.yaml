@@ -1,0 +1,15 @@
+samples: "config/samples.tsv"
+dummy_header: "resources/dummy_header.vcf"
+ref_genome: resources/REFERENCE_GENOMES/sus_scrofa/GCF_000003025.6/GCF_000003025.6_Sscrofa11.1_genomic.fna
+ref_genome_fai: resources/REFERENCE_GENOMES/sus_scrofa/GCF_000003025.6/GCF_000003025.6_Sscrofa11.1_genomic.fna.fai
+ref_genome_gff: resources/REFERENCE_GENOMES/sus_scrofa/GCF_000003025.6/GCF_000003025.6_Sscrofa11.1_genomic.gff.gz
+
+ref:
+  # ensembl species name
+  species: sus_scrofa
+  # ensembl release
+  release: 112
+  # genome build
+  build: Sscrofa11.1
+vep_cache_dir: resources/VEP/cache
+vep_plugins_dir: resources/VEP/plugins
