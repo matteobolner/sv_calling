@@ -1,15 +1,20 @@
 samples: "config/samples.tsv"
+#bam_folder: "resources/BAM"
+variants_folder: "data/sv_variants"
+
 dummy_header: "resources/dummy_header.vcf"
-ref_genome: resources/REFERENCE_GENOMES/sus_scrofa/GCF_000003025.6/GCF_000003025.6_Sscrofa11.1_genomic.fna
-ref_genome_fai: resources/REFERENCE_GENOMES/sus_scrofa/GCF_000003025.6/GCF_000003025.6_Sscrofa11.1_genomic.fna.fai
-ref_genome_gff: resources/REFERENCE_GENOMES/sus_scrofa/GCF_000003025.6/GCF_000003025.6_Sscrofa11.1_genomic.gff.gz
+ref_genome: resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.fna.gz
+ref_genome_fai: resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.fna.gz.fai
+ref_genome_gff: resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.gff.gz
+
 
 ref:
   # ensembl species name
-  species: sus_scrofa
+  species: oryctolagus_cuniculus
   # ensembl release
   release: 112
   # genome build
-  build: Sscrofa11.1
-vep_cache_dir: resources/VEP/cache
-vep_plugins_dir: resources/VEP/plugins
+  build: OryCun2.0
+
+vep_cache_dir: /lustre/home/bolner/RESOURCES/VEP_CACHE/oryctolagus_cuniculus/
+vep_plugins_dir: /lustre/home/bolner/RESOURCES/VEP_CACHE/oryctolagus_cuniculus/

@@ -1,0 +1,7 @@
+.snakemake/
+config/samples*
+data/
+logs/
+stats/
+reports/
+resources/

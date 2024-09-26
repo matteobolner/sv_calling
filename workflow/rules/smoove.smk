@@ -1,35 +1,39 @@
 rule smoove_call:
     input:
-        bam="{bam_folder}/{sample}.bam",
-        bam_idx="{bam_folder}/{sample}.bam.bai",
+        bam=get_bam,
+        bam_idx=get_bai,
         ref=config["ref_genome"],
         ref_idx=config["ref_genome_fai"],
         dummy_header=config["dummy_header"],
     output:
-        disc_reads="{variants_folder}/smoove/called/{sample}/{sample}.disc.bam.orig.bam",
-        split_reads=temp(
-            "{variants_folder}/smoove/called/{sample}/{sample}.split.bam.orig.bam"
-        ),
-        outdir=directory("{variants_folder}/smoove/called/{sample}"),
-        vcf=temp(
+        outdir=directory("{variants_folder}/smoove/called/{sample}/"),
+        #disc_reads=temp(
+        #    "{variants_folder}/smoove/called/{sample}/{sm_tag}/{sm_tag}.disc.bam.orig.bam"
+        #),
+        #split_reads=temp(
+        #    "{variants_folder}/smoove/called/{sample}/{sm_tag}/{sm_tag}.split.bam.orig.bam"
+        #),
+        vcf=(
             "{variants_folder}/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz"
         ),
-        idx=temp(
+        idx=(
             "{variants_folder}/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz.csi"
         ),
     container:
         "docker://brentp/smoove:latest"
-    threads: 1
+    threads: 4
     shell:
         # the code after || outputs the dummy vcf if no variants are found in the bam - this is necessary for further processing as empty files cause errors
-        """smoove call --outdir {output.outdir} --name {wildcards.sample} --fasta {input.ref} -p {threads} --genotype {input.bam}  || {{ sed 's/SS_69/{wildcards.sample}/g' {input.dummy_header} | bgzip -c > {output.vcf} && tabix -C -p vcf {output.vcf} ; }} """
+        """smoove call --outdir {output.outdir} --name {wildcards.sample} --fasta {input.ref} -p {threads} --genotype {input.bam} """  #|| {{ sed 's/SS_69/{wildcards.sample}/g' {input.dummy_header} | bgzip -c > {output.vcf} && tabix -C -p vcf {output.vcf} ; }} """
 
 
 rule smoove_merge:
     input:
         vcfs=expand(
-            "{variants_folder}/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz",
+            "{{variants_folder}}/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz",
+            zip,
             sample=samples.index,
+            sm_tag=samples.SM_TAG,
         ),
         ref=config["ref_genome"],
     output:
@@ -45,7 +49,7 @@ rule joint_genotype_svs:
     input:
         ref=config["ref_genome"],
         vcf="{variants_folder}/smoove/merged/all.sites.vcf.gz",
-        bam="{bam_folder}/{sample}.bam",
+        bam=get_bam,
     output:
         temp(
             "{variants_folder}/smoove/genotyped/{sample}-joint-smoove.genotyped.vcf.gz"
@@ -60,15 +64,14 @@ rule joint_genotype_svs:
     shell:
         "smoove genotype -d -x -p {threads} --name {wildcards.sample}-joint --outdir {params.dir} --fasta {input.ref} --vcf {input.vcf} {input.bam}"
 
-
 rule merge_genotyped_samples:
     input:
         vcfs=expand(
-            "{variants_folder}/smoove/genotyped/{sample}-joint-smoove.genotyped.vcf.gz",
+            "{{variants_folder}}/smoove/genotyped/{sample}-joint-smoove.genotyped.vcf.gz",
             sample=samples.index,
         ),
         indexes=expand(
-            "{variants_folder}/smoove/genotyped/{sample}-joint-smoove.genotyped.vcf.gz.csi",
+            "{{variants_folder}}/smoove/genotyped/{sample}-joint-smoove.genotyped.vcf.gz.csi",
             sample=samples.index,
         ),
     params:
@@ -122,15 +125,14 @@ rule annotate_gene_variants_smoove:
         plugins=config["vep_plugins_dir"],
     output:
         calls=temp("{variants_folder}/smoove/vep/annotated.vcf"),  # .vcf, .vcf.gz or .bcf
-        stats="reports/variants/large/vep/all_genes.html",
+        stats="reports/{variants_folder}/vep/all_genes.html",
     params:
         plugins=[],
         extra="--everything",
-    log:
-        "logs/vep/smoove/all_genes.log",
     threads: 4
     wrapper:
         "v4.5.0/bio/vep/annotate"
+
 
 rule bgzip_annotated_smoove:
     input:
@@ -138,16 +140,17 @@ rule bgzip_annotated_smoove:
     output:
         "{variants_folder}/smoove/vep/annotated.vcf.gz",
     params:
-        extra="", # optional
+        extra="",  # optional
     threads: 1
     wrapper:
         "v4.5.0/bio/bgzip"
 
+
 rule tabix_annotated_smoove:
     input:
-        "{variants_folder}/smoove/vep/annotated.vcf.gz"
+        "{variants_folder}/smoove/vep/annotated.vcf.gz",
     output:
-        "{variants_folder}/smoove/vep/annotated.vcf.gz.tbi"
+        "{variants_folder}/smoove/vep/annotated.vcf.gz.tbi",
     params:
         "-p vcf",
     wrapper:
