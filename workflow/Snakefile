@@ -5,6 +5,6 @@ include: "rules/mosdepth.smk"
 
 
 rule sv_calling:
-    output:
+    input:
         vep_annotated="data/sv_variants/smoove/vep/annotated.vcf.gz",
         mosdepth="reports/multiqc/mosdepth/report.html",
