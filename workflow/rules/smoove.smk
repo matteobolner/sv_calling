@@ -7,16 +7,10 @@ rule smoove_call:
         dummy_header=config["dummy_header"],
     output:
         outdir=directory("data/sv_variants/smoove/called/{sample}/"),
-        #disc_reads=temp(
-        #    "data/sv_variants/smoove/called/{sample}/{sm_tag}/{sm_tag}.disc.bam.orig.bam"
-        #),
-        #split_reads=temp(
-        #    "data/sv_variants/smoove/called/{sample}/{sm_tag}/{sm_tag}.split.bam.orig.bam"
-        #),
-        vcf=(
+        vcf=temp(
             "data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz"
         ),
-        idx=(
+        idx=temp(
             "data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz.csi"
         ),
     container:
@@ -104,31 +98,42 @@ rule annotate_with_gff_smoove:
         "smoove annotate --gff {input.gff} {input.vcf} > {output.vcf}"
 
 
-# BND REMOVAL IS DONE BECAUSE VEP CANT PARSE THE ALT FIELD OF BND VARIANTS
-#
-# rule remove_BND_before_VEP:
-#    input:
-#        vcf="data/sv_variants/smoove/annotated/annotated.vcf",
-#    output:
-#        vcf="data/sv_variants/smoove/annotated/annotated_no_BND.vcf",
-#    shell:
-#        "grep -v BND {input} > {output}"
+if config["vep_use_gff"]:
 
+    rule annotate_gene_variants_smoove:
+        input:
+            calls="data/sv_variants/smoove/annotated/annotated.vcf",
+            plugins=config["vep_plugins_dir"],
+            fasta=config["ref_genome"],
+            fai=config["ref_genome_fai"],  # fasta index
+            gff=config["ref_genome_gff"],
+            csi=config["ref_genome_gff_csi"],  # tabix index
+        output:
+            calls=temp("data/sv_variants/smoove/vep/annotated.vcf"),
+            stats="reports/vep_annotation.html",
+        params:
+            plugins=[],
+            extra="--everything",
+        threads: 4
+        wrapper:
+            "v4.5.0/bio/vep/annotate"
 
-rule annotate_gene_variants_smoove:
-    input:
-        calls="data/sv_variants/smoove/annotated/annotated.vcf",
-        cache=config["vep_cache_dir"],  # can be omitted if fasta and gff are specified
-        plugins=config["vep_plugins_dir"],
-    output:
-        calls=temp("data/sv_variants/smoove/vep/annotated.vcf"),
-        stats="reports/vep_annotation.html",
-    params:
-        plugins=[],
-        extra="--everything",
-    threads: 4
-    wrapper:
-        "v4.5.0/bio/vep/annotate"
+else:
+
+    rule annotate_gene_variants_smoove:
+        input:
+            calls="data/sv_variants/smoove/annotated/annotated.vcf",
+            cache=config["vep_cache_dir"],  # can be omitted if fasta and gff are specified
+            plugins=config["vep_plugins_dir"],
+        output:
+            calls=temp("data/sv_variants/smoove/vep/annotated.vcf"),
+            stats="reports/vep_annotation.html",
+        params:
+            plugins=[],
+            extra="--everything",
+        threads: 4
+        wrapper:
+            "v4.5.0/bio/vep/annotate"
 
 
 rule bgzip_annotated_smoove:

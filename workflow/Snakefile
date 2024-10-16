@@ -7,13 +7,3 @@ include: "rules/mosdepth.smk"
 rule all:
     input:
         "data/sv_variants/smoove/vep/annotated.vcf.gz"
-        #expand(
-        #    "data/sv_variants/smoove/merged/all.sites.vcf.gz",
-        #    zip,
-        #    sample=samples.index,
-        #),
-        #expand("{variants_folder}/smoove/merged/all.sites.vcf.gz", variants_folder=config['variants_folder']),
-        #expand("{variants_folder}/smoove/called/{sample}", variants_folder=config['variants_folder'], sample=samples.index[1::])
-        #expand("{variants_folder}/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz", variants_folder=config['variants_folder'], sample=samples.index[0])
-        #"reports/multiqc/mosdepth/report.html",
-        #expand("stats/mosdepth/{sample}.mosdepth.global.dist.txt", sample=samples.index)

@@ -4,16 +4,15 @@ rule mosdepth:
         bai=get_bai,
     output:
         "stats/mosdepth/{sample}.mosdepth.global.dist.txt",
-        #"stats/mosdepth/{sample}.per-base.bed.gz",  # produced unless --no-per-base specified
-        summary="stats/mosdepth/{sample}.mosdepth.summary.txt",  # this named output is required for prefix parsing
+        summary="stats/mosdepth/{sample}.mosdepth.summary.txt",
     log:
         "logs/mosdepth/{sample}.log",
     params:
-        extra="--fast-mode --no-per-base",  # optional
-    # additional decompression threads through `--threads`
-    threads: 4  # This value - 1 will be sent to `--threads`
+        extra="--fast-mode --no-per-base",
+    threads: 4
     wrapper:
         "v4.5.0/bio/mosdepth"
+
 
 rule multiqc_mosdepth:
     input:
@@ -22,7 +21,7 @@ rule multiqc_mosdepth:
         "reports/multiqc/mosdepth/report.html",
         directory("reports/multiqc/mosdepth/report_data"),
     params:
-        extra="--verbose",  # Optional: extra parameters for multiqc.
+        extra="--verbose",
     log:
         "logs/multiqc/mosdepth.log",
     wrapper:
