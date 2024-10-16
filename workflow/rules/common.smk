@@ -19,8 +19,3 @@ def get_bam(wildcards):
 def get_bai(wildcards):
     sample = samples.loc[wildcards.sample]
     return sample.bam_path + ".bai"
-
-
-def get_sm_tag(wildcards):
-    sample = samples.loc[wildcards.sample]
-    return sample.SM_TAG

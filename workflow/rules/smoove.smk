@@ -25,9 +25,7 @@ rule smoove_merge:
     input:
         vcfs=expand(
             "data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz",
-            zip,
             sample=samples.index,
-            sm_tag=samples.SM_TAG,
         ),
         ref=config["ref_genome"],
     output:
