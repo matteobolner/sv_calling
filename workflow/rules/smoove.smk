@@ -4,7 +4,7 @@ rule smoove_call:
         bam_idx=get_bai,
         ref=config["ref_genome"],
         ref_idx=config["ref_genome_fai"],
-        dummy_header=config["dummy_header"],
+        #dummy_header=config["dummy_header"],
     output:
         outdir=directory("data/sv_variants/smoove/called/{sample}/"),
         vcf=temp(

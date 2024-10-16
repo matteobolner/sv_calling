@@ -2,11 +2,11 @@ samples: "config/samples.tsv"
 #bam_folder: "resources/BAM"
 variants_folder: "data/sv_variants"
 
-dummy_header: "resources/dummy_header.vcf"
+#dummy_header: "resources/dummy_header.vcf"
 ref_genome: "resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.fna.gz"
 ref_genome_fai: "resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.fna.gz.fai"
 ref_genome_gff: "resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.gff.gz"
-ref_genome_gff: "resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.gff.gz.csi"
+ref_genome_gff_csi: "resources/ref_genome/GCF_000003625.3_OryCun2.0_genomic.gff.gz.csi"
 
 vep_use_gff: False
 
