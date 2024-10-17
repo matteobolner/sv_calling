@@ -96,7 +96,7 @@ rule annotate_with_gff_smoove:
         "smoove annotate --gff {input.gff} {input.vcf} > {output.vcf}"
 
 
-rule annotate_gene_variants_smoove_vep_cache:
+rule annotate_gene_variants_smoove_ncbi_gff:
     input:
         calls="data/sv_variants/smoove/annotated/annotated.vcf",
         plugins=config["vep_plugins_dir"],
@@ -115,7 +115,7 @@ rule annotate_gene_variants_smoove_vep_cache:
         "v4.5.0/bio/vep/annotate"
 
 
-rule annotate_gene_variants_smoove_ncbi_gff:
+rule annotate_gene_variants_smoove_vep_cache:
     input:
         calls="data/sv_variants/smoove/annotated/annotated.vcf",
         cache=config["vep_cache_dir"],  # can be omitted if fasta and gff are specified
