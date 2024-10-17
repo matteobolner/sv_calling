@@ -103,7 +103,7 @@ rule annotate_gene_variants_smoove_ncbi_gff:
         fasta=config["ref_genome"],
         fai=config["ref_genome_fai"],  # fasta index
         gff=config["ref_genome_gff"],
-        #csi=config["ref_genome_gff_csi"],  # tabix index
+        csi=config["ref_genome_gff_csi"],  # tabix index
     output:
         calls=temp("data/sv_variants/smoove/vep/ncbi_annotated.vcf"),
         stats="reports/vep_annotation.html",
