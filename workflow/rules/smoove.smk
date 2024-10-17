@@ -95,6 +95,7 @@ rule annotate_with_gff_smoove:
     shell:
         "smoove annotate --gff {input.gff} {input.vcf} > {output.vcf}"
 
+
 rule annotate_gene_variants_smoove_vep_cache:
     input:
         calls="data/sv_variants/smoove/annotated/annotated.vcf",
@@ -113,6 +114,7 @@ rule annotate_gene_variants_smoove_vep_cache:
     wrapper:
         "v4.5.0/bio/vep/annotate"
 
+
 rule annotate_gene_variants_smoove_ncbi_gff:
     input:
         calls="data/sv_variants/smoove/annotated/annotated.vcf",
@@ -128,11 +130,13 @@ rule annotate_gene_variants_smoove_ncbi_gff:
     wrapper:
         "v4.5.0/bio/vep/annotate"
 
+
 annotated_vcf = branch(
-    config['vep_use_gff']
+    config["vep_use_gff"],
     then="data/sv_variants/smoove/vep/ncbi_annotated.vcf",
-    otherwise="data/sv_variants/smoove/vep/ensembl_annotated.vcf"
+    otherwise="data/sv_variants/smoove/vep/ensembl_annotated.vcf",
 )
+
 
 rule bgzip_annotated_smoove:
     input:
