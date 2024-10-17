@@ -89,7 +89,7 @@ rule annotate_with_gff_smoove:
         vcf="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
         gff=config["ref_genome_gff"],
     output:
-        vcf="data/sv_variants/smoove/annotated/annotated.vcf",
+        vcf=temp("data/sv_variants/smoove/annotated/annotated.vcf"),
     container:
         "docker://brentp/smoove:latest"
     shell:
@@ -105,7 +105,7 @@ rule annotate_gene_variants_smoove_ncbi_gff:
         gff=config["ref_genome_gff"],
         #csi=config["ref_genome_gff_csi"],  # tabix index
     output:
-        calls=temp("data/sv_variants/smoove/vep/ensembl_annotated.vcf"),
+        calls=temp("data/sv_variants/smoove/vep/ncbi_annotated.vcf"),
         stats="reports/vep_annotation.html",
     params:
         plugins=[],
@@ -121,7 +121,7 @@ rule annotate_gene_variants_smoove_vep_cache:
         cache=config["vep_cache_dir"],  # can be omitted if fasta and gff are specified
         plugins=config["vep_plugins_dir"],
     output:
-        calls=temp("data/sv_variants/smoove/vep/ncbi_annotated.vcf"),
+        calls=temp("data/sv_variants/smoove/vep/ensembl_annotated.vcf"),
         stats="reports/vep_annotation.html",
     params:
         plugins=[],
