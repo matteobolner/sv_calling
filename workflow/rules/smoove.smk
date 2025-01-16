@@ -147,7 +147,7 @@ rule bgzip_annotated_smoove:
         extra="",  # optional
     threads: 1
     wrapper:
-        "v4.5.0/bio/bgzip"
+        "v5.5.1/bio/bgzip"
 
 
 rule tabix_annotated_smoove:
