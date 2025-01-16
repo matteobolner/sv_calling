@@ -142,12 +142,12 @@ rule bgzip_annotated_smoove:
     input:
         annotated_vcf,
     output:
-        "data/sv_variants/smoove/vep/annotated.vcf.gz",
+        zipped="data/sv_variants/smoove/vep/annotated.vcf.gz",
     params:
         extra="",  # optional
     threads: 1
-    wrapper:
-        "v5.5.1/bio/bgzip"
+    shell:
+        "bgzip {input.annotated_vcf} -c > {output.zipped}"
 
 
 rule tabix_annotated_smoove:
