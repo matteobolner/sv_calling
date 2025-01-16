@@ -147,7 +147,7 @@ rule bgzip_annotated_smoove:
         extra="",  # optional
     threads: 1
     shell:
-        "bgzip {input.annotated_vcf} -c > {output.zipped}"
+        "bgzip {input} -c > {output.zipped}"
 
 
 rule tabix_annotated_smoove:
