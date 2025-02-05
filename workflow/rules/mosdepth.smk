@@ -8,7 +8,7 @@ rule mosdepth:
     log:
         "logs/mosdepth/{sample}.log",
     params:
-        extra="--fast-mode --no-per-base",
+        extra="--fast-mode",
     threads: 4
     wrapper:
         "v4.5.0/bio/mosdepth"
