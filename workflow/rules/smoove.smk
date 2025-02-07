@@ -79,7 +79,7 @@ rule index_merged_genotyped_samples:
     wrapper:
         "v4.5.0/bio/tabix/index"
 
-
+"""
 rule annotate_with_gff_smoove:
     input:
         vcf="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
@@ -90,11 +90,11 @@ rule annotate_with_gff_smoove:
         "docker://brentp/smoove:latest"
     shell:
         "smoove annotate --gff {input.gff} {input.vcf} > {output.vcf}"
-
+"""
 
 rule annotate_gene_variants_smoove_ncbi_gff:
     input:
-        calls="data/sv_variants/smoove/annotated/annotated.vcf",
+        vcf="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
         plugins=config["vep_plugins_dir"],
         fasta=config["ref_genome"],
         fai=config["ref_genome_fai"],  # fasta index
