@@ -17,7 +17,7 @@ if config["vep_use_gff"] == False:
 rule setup_ref_genome:
     output:
         fasta=config["ref_genome"],
-        faidx=config["ref_genome_faidx"],
+        faidx=config["ref_genome_fai"],
     shell:
         "genomers --accession {config[genome_accession] --name {config[genome_name]}} -g | gunzip | bgzip -c > {output.fasta} && samtools faidx {output.fasta} -o {output.faidx}"
 
