@@ -94,7 +94,7 @@ rule annotate_with_gff_smoove:
 
 rule annotate_gene_variants_smoove_ncbi_gff:
     input:
-        vcf="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
+        calls="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
         plugins=config["vep_plugins_dir"],
         fasta=config["ref_genome"],
         fai=config["ref_genome_fai"],  # fasta index
@@ -112,7 +112,7 @@ rule annotate_gene_variants_smoove_ncbi_gff:
 
 rule annotate_gene_variants_smoove_vep_cache:
     input:
-        calls="data/sv_variants/smoove/annotated/annotated.vcf",
+        calls="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
         cache=config["vep_cache_dir"],  # can be omitted if fasta and gff are specified
         plugins=config["vep_plugins_dir"],
     output:
