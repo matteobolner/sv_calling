@@ -19,7 +19,7 @@ rule setup_ref_genome:
         fasta=config["ref_genome"],
         faidx=config["ref_genome_fai"],
     shell:
-        "genomers --accession {config[genome_accession]} --name {config[genome_name]} -g | gunzip | bgzip -c > {output.fasta} && samtools faidx {output.fasta} -o {output.faidx}"
+        "genomers --accession {config[genome_accession]} --name {config[genome_name]} --genome | gunzip | bgzip -c > {output.fasta} && samtools faidx {output.fasta} -o {output.faidx}"
 
 
 rule setup_ref_genome_gff:
@@ -27,4 +27,4 @@ rule setup_ref_genome_gff:
         gff=config["ref_genome_gff"],
         csi=config["ref_genome_gff_csi"],
     shell:
-        "genomers --accession {config[genome_accession]} --name {config[genome_name]} -gff | gunzip | grep -v '  #' | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > {output.gff} && tabix -p gff --csi {output.gff}"
+        "genomers --accession {config[genome_accession]} --name {config[genome_name]} --gff | gunzip | grep -v '  #' | sort -k1,1 -k4,4n -k5,5n -t$'\t' | bgzip -c > {output.gff} && tabix -p gff --csi {output.gff}"
