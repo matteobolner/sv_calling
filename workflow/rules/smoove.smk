@@ -7,12 +7,8 @@ rule smoove_call:
         #dummy_header=config["dummy_header"],
     output:
         outdir=directory("data/sv_variants/smoove/called/{sample}/"),
-        vcf=temp(
-            "data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz"
-        ),
-        idx=temp(
-            "data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz.csi"
-        ),
+        vcf="data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz",
+        idx="data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz.csi"
     container:
         "docker://brentp/smoove:latest"
     threads: 4
