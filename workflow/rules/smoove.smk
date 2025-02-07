@@ -8,7 +8,7 @@ rule smoove_call:
     output:
         outdir=directory("data/sv_variants/smoove/called/{sample}/"),
         vcf="data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz",
-        idx="data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz.csi"
+        idx="data/sv_variants/smoove/called/{sample}/{sample}-smoove.genotyped.vcf.gz.csi",
     container:
         "docker://brentp/smoove:latest"
     threads: 4
@@ -103,12 +103,11 @@ rule annotate_gene_variants_smoove_ncbi_gff:
     output:
         calls=temp("data/sv_variants/smoove/vep/ncbi_annotated.vcf"),
         stats="reports/vep_annotation.html",
-    params:
-        plugins=[],
-        extra="--everything",
     threads: 4
-    wrapper:
-        "v4.5.0/bio/vep/annotate"
+    container:
+        "docker://ensemblorg/ensembl-vep:latest"
+    shell:
+        "vep -i {input.calls} --gff {input.gff} --fasta {input.fasta} --everything --output_file {output.calls} --vcf --stats_file {output.stats} --sift b --fork {threads}"
 
 
 rule annotate_gene_variants_smoove_vep_cache:
