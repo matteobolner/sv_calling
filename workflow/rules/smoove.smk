@@ -95,7 +95,6 @@ rule annotate_with_gff_smoove:
 rule annotate_gene_variants_smoove_ncbi_gff:
     input:
         calls="data/sv_variants/smoove/genotyped/all_samples_genotyped.smoove.square.vcf.gz",
-        plugins=config["vep_plugins_dir"],
         fasta=config["ref_genome"],
         fai=config["ref_genome_fai"],  # fasta index
         gff=config["ref_genome_gff"],
@@ -103,11 +102,11 @@ rule annotate_gene_variants_smoove_ncbi_gff:
     output:
         calls=temp("data/sv_variants/smoove/vep/ncbi_annotated.vcf"),
         stats="reports/vep_annotation.html",
-    threads: 4
+    threads: 4 
     container:
         "docker://ensemblorg/ensembl-vep:latest"
     shell:
-        "vep -i {input.calls} --gff {input.gff} --fasta {input.fasta} --everything --output_file {output.calls} --vcf --stats_file {output.stats} --sift b --fork {threads}"
+        "vep -i {input.calls} --gff {input.gff} --fasta {input.fasta} --everything --output_file {output.calls} --vcf --stats_file {output.stats} --sift b --regulatory --numbers --fork {threads}"
 
 
 rule annotate_gene_variants_smoove_vep_cache:
